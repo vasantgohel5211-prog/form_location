@@ -1,0 +1,7 @@
+{
+  "name": "Employee Manager",
+  "description": "A comprehensive employee management system with local persistence and geolocation support.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
