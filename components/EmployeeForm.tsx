@@ -109,24 +109,23 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, onCancelEdit, edi
       },
       (error) => {
         console.error('Error getting location:', error);
-        
-        let errorMessage = 'Unable to retrieve location.';
-        switch(error.code) {
-          case error.PERMISSION_DENIED:
-            errorMessage = 'Location permission denied. Please allow location access in your browser settings.';
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information is unavailable.';
-            break;
-          case error.TIMEOUT:
-            errorMessage = 'The request to get user location timed out.';
-            break;
-          default:
-            errorMessage = error.message || errorMessage;
-        }
-        
-        alert(errorMessage);
         setLoadingLocation(false);
+
+        let msg = 'Unable to retrieve location.';
+        
+        // Use numeric codes for broader compatibility and safety
+        // 1: PERMISSION_DENIED, 2: POSITION_UNAVAILABLE, 3: TIMEOUT
+        if (error.code === 1) {
+          msg = 'Location permission denied. Please allow location access in your browser settings.';
+        } else if (error.code === 2) {
+          msg = 'Location information is unavailable. Please check your signal.';
+        } else if (error.code === 3) {
+          msg = 'The request to get user location timed out. Please try again.';
+        } else if (typeof error.message === 'string' && error.message.trim() !== '') {
+          msg = error.message;
+        }
+
+        alert(msg);
       },
       options
     );
